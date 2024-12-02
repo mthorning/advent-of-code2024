@@ -1,14 +1,16 @@
-import { runReports, analyseReport  } from './pt_one.ts'
+import { analyseReport, runReports } from "./pt_one.ts";
 
 export function isSafe(report: number[]): boolean {
-  let result = analyseReport(report)
-  if(result > -1) {
-    report.splice(result, 1)
-    result = analyseReport(report)
+  if (analyseReport(report) === -1) return true;
+
+  for (let i = 0; i < report.length; i++) {
+    const shortReport = [...report]
+    shortReport.splice(i, 1);
+    if (analyseReport(shortReport) === -1) return true;
   }
-  return result === -1;
-} 
+  return false;
+}
 
 if (import.meta.main) {
-  runReports(isSafe)
+  runReports(isSafe);
 }

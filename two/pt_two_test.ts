@@ -18,3 +18,10 @@ Deno.test(function analyseReportTest() {
   assertEquals(isSafe(reports[4]), true);
   assertEquals(isSafe(reports[5]), true);
 });
+
+Deno.test(function allSafeReportsTest() {
+  [
+    [48, 46, 47, 49, 51, 54, 56],
+    [1, 1, 2, 3, 4, 5],
+  ].forEach((report) => assertEquals(isSafe(report), true));
+});

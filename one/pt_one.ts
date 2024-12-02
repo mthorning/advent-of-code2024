@@ -1,4 +1,6 @@
-type Arrays = [number[], number[]]
+/// <reference lib="deno.ns" />
+
+export type Arrays = [number[], number[]]
 export function createArrayFromFile(path: string): Arrays {
   const file = Deno.readTextFileSync(path);
 
@@ -32,7 +34,7 @@ export function calculateDiffs(arrays: Arrays): number {
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
-  const arrays = createArrayFromFile('input')
+  const arrays = createArrayFromFile('input.txt')
   const diff = calculateDiffs(arrays)
   console.log(diff)
 }

@@ -1,10 +1,10 @@
 import { assertEquals } from "@std/assert";
-import { calculateDiffs, createArrayFromFile } from "./pt_one.ts";
+import { calculateDiffs, createArrayFromFile, type Arrays } from "./pt_one.ts";
 
-const arrays = [[3, 4, 2, 1, 3, 3], [4, 3, 5, 3, 9, 3]] as const
+const arrays: Arrays = [[3, 4, 2, 1, 3, 3], [4, 3, 5, 3, 9, 3]]
 
 Deno.test(function readFromFileTest() {
-  const output = createArrayFromFile('input_test') 
+  const output = createArrayFromFile('input_test.txt') 
   assertEquals(output, arrays);
 })
 

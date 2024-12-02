@@ -19,7 +19,7 @@ export function calculateSimilarities(arrays: Arrays): number {
 }
 
 if (import.meta.main) {
-  const arrays = createArrayFromFile('input')
+  const arrays = createArrayFromFile('input.txt')
   const similiarityScore = calculateSimilarities(arrays)
   console.log(similiarityScore)
 }

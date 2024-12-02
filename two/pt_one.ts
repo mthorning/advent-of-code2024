@@ -7,11 +7,12 @@ export function getReportsFromInput(path: string): number[][] {
 }
 
 type Vector = "asc" | "desc";
-export function isSafe(report: number[]): boolean {
+export function analyseReport(report: number[]): number {
   let prev: number = -1;
   let vector: Vector | undefined;
 
-  for (const level of report) {
+  for (let i = 0; i < report.length; i++) {
+    const level = report[i];
     const currentVector = level > prev ? "asc" : "desc";
 
     let diff = level - prev;
@@ -23,28 +24,35 @@ export function isSafe(report: number[]): boolean {
         continue;
 
       case vector && vector !== currentVector:
-        return false;
+        return i;
 
       case diff > 3:
-        return false;
+        return i;
 
       case diff === 0:
-        return false;
+        return i;
     }
 
     prev = level;
     vector = currentVector;
   }
 
-  return true;
+  return -1;
 }
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
+export function isSafe(report: number[]): boolean {
+  return analyseReport(report) === -1
+}
+
+export function runReports(checkIfSafe = isSafe) {
   const reports = getReportsFromInput("./input.txt");
   const totalSafe = reports.reduce(
-    (numSafe, report) => isSafe(report) ? numSafe + 1 : numSafe,
+    (numSafe, report) => checkIfSafe(report) ? numSafe + 1 : numSafe,
     0,
   );
   console.log(totalSafe)
+}
+
+if (import.meta.main) {
+  runReports();
 }

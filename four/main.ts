@@ -9,23 +9,25 @@ export function hasSpace({
   y,
   width,
   height,
+  wordLength,
 }: {
   x: number;
   y: number;
   width: number;
   height: number;
+  wordLength: number;
 }): Record<string, boolean> {
-  // console.log('width', width, 'height', height)
+  const len = wordLength - 1;
   return {
-    hasSpaceAbove: y > 2,
-    hasSpaceAfter: x < (width - 3),
-    hasSpaceBelow: y < (height - 3),
-    hasSpaceBefore: x > 2,
+    hasSpaceAbove: y >= len,
+    hasSpaceAfter: x < (width - len),
+    hasSpaceBelow: y < (height - len),
+    hasSpaceBefore: x >= len,
   };
 }
 
 const XMAS = "XMAS";
-export function search(wordSearch: string[][]): number {
+export function partOneSearch(wordSearch: string[][]): number {
   const makeCheck =
     (x: number, y: number) => (xInc: number, yInc: number): number => {
       let found = "X";
@@ -56,10 +58,8 @@ export function search(wordSearch: string[][]): number {
         y,
         width: wordSearch[y].length,
         height: wordSearch.length,
+        wordLength: XMAS.length,
       });
-
-      /* console.log(y, hasSpaceAbove, hasSpaceBelow);
-      console.log(x, hasSpaceBefore, hasSpaceAfter); */
 
       const check = makeCheck(x, y);
 
@@ -107,8 +107,43 @@ export function search(wordSearch: string[][]): number {
   return count;
 }
 
+export function partTwoSearch(wordSearch: string[][]): number {
+  let count = 0;
+  for (let y = 0; y < wordSearch.length; y++) {
+    for (let x = 0; x < wordSearch[y].length; x++) {
+      if (wordSearch[y][x] !== "A") continue;
+
+      const check = (x: number, y: number): number => {
+        return Number([
+          `${wordSearch[y - 1][x - 1]}A${wordSearch[y + 1][x + 1]}`,
+          `${wordSearch[y - 1][x + 1]}A${wordSearch[y + 1][x - 1]}`,
+        ].every((word) => ["MAS", "SAM"].includes(word)));
+      };
+
+      const {
+        hasSpaceAbove,
+        hasSpaceAfter,
+        hasSpaceBelow,
+        hasSpaceBefore,
+      } = hasSpace({
+        x,
+        y,
+        width: wordSearch[y].length,
+        height: wordSearch.length,
+        wordLength: 2,
+      });
+
+      if (hasSpaceAbove && hasSpaceBefore && hasSpaceBelow && hasSpaceAfter) {
+        count += check(x, y);
+      }
+    }
+  }
+  return count;
+}
+
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   const input = Deno.readTextFileSync("input.txt");
-  console.log(search(makeWordSearch(input)));
+  // console.log(partOneSearch(makeWordSearch(input)));
+  console.log(partTwoSearch(makeWordSearch(input)));
 }

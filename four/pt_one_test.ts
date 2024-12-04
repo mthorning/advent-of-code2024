@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { hasSpace, makeWordSearch, search } from "./main.ts";
+import { hasSpace, makeWordSearch, partOneSearch, partTwoSearch } from "./main.ts";
 
 const wordSearch = [
   ["M", "M", "M", "S", "X", "X", "M", "A", "S", "M"],
@@ -32,46 +32,46 @@ Deno.test(function makeWordSearchTest() {
 });
 
 Deno.test(function searchTest() {
-  assertEquals(search(wordSearch), 18);
-  assertEquals(search(makeWordSearch('SAMX')), 1);
-  assertEquals(search(makeWordSearch('XMAS')), 1);
+  assertEquals(partOneSearch(wordSearch), 18);
+  assertEquals(partOneSearch(makeWordSearch('SAMX')), 1);
+  assertEquals(partOneSearch(makeWordSearch('XMAS')), 1);
 });
 
 Deno.test(function searchDirectionsTest() {
-  assertEquals(search(makeWordSearch(`
+  assertEquals(partOneSearch(makeWordSearch(`
 X
 M
 A
 S
   `)), 1);
-  assertEquals(search(makeWordSearch(`
+  assertEquals(partOneSearch(makeWordSearch(`
 S
 A
 M
 X
   `)), 1);
-  assertEquals(search(makeWordSearch(`
+  assertEquals(partOneSearch(makeWordSearch(`
 S
 YA
 YYM
 YYYX
   `)), 1);
 
-  assertEquals(search(makeWordSearch(`
+  assertEquals(partOneSearch(makeWordSearch(`
 YYYX
 YYM
 YA
 S
   `)), 1);
 
-  assertEquals(search(makeWordSearch(`
+  assertEquals(partOneSearch(makeWordSearch(`
 YYYS
 YYAY
 YMYY
 XYYY
   `)), 1);
 
-  assertEquals(search(makeWordSearch(`
+  assertEquals(partOneSearch(makeWordSearch(`
 XYYY
 YMYY
 YYAY
@@ -90,11 +90,16 @@ Deno.test('has space', () => {
         y: 3,
         width: 7,
         height: 7,
+        wordLength: 4
       });
 
   assertEquals(hasSpaceAbove, true)
   assertEquals(hasSpaceAfter, true)
   assertEquals(hasSpaceBelow, true)
   assertEquals(hasSpaceBefore, true)
+})
+
+Deno.test(function partTwoTest() {
+  assertEquals(partTwoSearch(wordSearch), 9);
 })
 
